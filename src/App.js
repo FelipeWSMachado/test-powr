@@ -5,8 +5,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Containers />} />
-        <Route path="/:id" component={<Containers />} />
+        <Route exact path="/" element={<Containers />} />
+        <Route exact path="/:id" element={<Containers />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Container from "./Container";
 import {
   Button,
@@ -10,13 +10,23 @@ import {
   SaveForm,
   FormContainer,
 } from "./Styled";
-
+import { sendItems, getItemsByID, updateItems } from "../API/api";
 export default function BoxContainer() {
-  let history = useNavigate();
   const { id } = useParams();
   const [boxes, setBoxes] = useState([]);
   const [jsonInput, setJsonInput] = useState("");
   const [jsonOutput, setJsonOutput] = useState("");
+  const getData = async () => {
+    if (id) {
+      await getItemsByID(id).then(({ data }) => {
+        setBoxes(JSON.parse(data.items));
+      });
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleInput = (e) => {
     e.preventDefault();
@@ -31,6 +41,17 @@ export default function BoxContainer() {
     setJsonOutput(JSON.stringify({ type: "container", items: boxes }));
   };
 
+  const handleSave = async () => {
+    if (!id) {
+      await sendItems(JSON.stringify(boxes)).then(({ data }) => {
+        alert("Object saved");
+      });
+    } else {
+      await updateItems(JSON.stringify(boxes), id).then(({ data }) => {
+        alert("Object saved");
+      });
+    }
+  };
   return (
     <>
       <Container boxes={boxes} parent={boxes} />
@@ -46,7 +67,7 @@ export default function BoxContainer() {
           <Button onClick={(e) => handleInputBuild(e)}>Build</Button>
         </InputForm>
         <SaveForm>
-          <Button>Save</Button>
+          <Button onClick={handleSave}>Save</Button>
         </SaveForm>
       </FormContainer>
     </>
