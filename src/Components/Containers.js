@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Container from "./Container";
 import {
   Button,
@@ -13,6 +13,7 @@ import {
 import { sendItems, getItemsByID, updateItems } from "../API/api";
 export default function BoxContainer() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [boxes, setBoxes] = useState([]);
   const [jsonInput, setJsonInput] = useState("");
   const [jsonOutput, setJsonOutput] = useState("");
@@ -45,6 +46,8 @@ export default function BoxContainer() {
     if (!id) {
       await sendItems(JSON.stringify(boxes)).then(({ data }) => {
         alert("Object saved");
+        console.log(data);
+        navigate(`/${data[0]}`);
       });
     } else {
       await updateItems(JSON.stringify(boxes), id).then(({ data }) => {

@@ -4,7 +4,8 @@ const api = axios.create({
   headers: {
     "Access-Control-Allow-Origin": "*",
   },
-  baseURL: "https://test-powr-back.herokuapp.com",
+  //baseURL: "https://test-powr-back.herokuapp.com",
+  baseURL: "http://localhost:3333",
 });
 
 export function sendItems(json) {
